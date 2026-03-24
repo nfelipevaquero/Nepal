@@ -2,154 +2,21 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal School DocFest - Prototipo</title>
+    <title>Nepal School DocFest</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #222; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        #game-container { border: 4px solid #444; border-radius: 8px; overflow: hidden; }
+        body { margin: 0; background: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        #game-container { box-shadow: 0 0 20px rgba(0,0,0,0.2); }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
 <body>
-
     <div id="game-container"></div>
 
-    <script>
-    // --- 1. DATOS DEL JUEGO ---
-    const GAME_DATA = {
-        experts: {
-            food: {
-                id: 'food', role: 'Food Expert', name: 'Kavita Gurung', location: 'Pokhara - Province 4',
-                mapX: 580, mapY: 340, color: 0xe67e22, youtubeId: 'dQw4w9WgXcQ',
-                quiz: [
-                    {
-                        recipe: "Recipe: Panipuri\nIngredients: 50g pellets, Onion, potato, chili.\nMethod: Deep fry pellets, stuff with mix.",
-                        options: [
-                            { text: "Samosa", correct: false, color: 0x9b59b6 },
-                            { text: "Panipuri", correct: true, color: 0x3498db },
-                            { text: "Thali", correct: false, color: 0x2ecc71 },
-                            { text: "Momo", correct: false, color: 0xf1c40f }
-                        ]
-                    }
-                ]
-            },
-            geo: {
-                id: 'geo', role: 'Geography Expert', name: 'Expert Name', location: 'Lukla - Everest Region',
-                mapX: 950, mapY: 420, color: 0x27ae60, youtubeId: 'dQw4w9WgXcQ', quiz: []
-            }
-        }
-    };
-
-    // --- 2. ESCENA DE CARGA (BOOT) ---
-    class BootScene extends Phaser.Scene {
-        constructor() { super('BootScene'); }
-        preload() {
-            // Creamos texturas básicas por código para no depender de archivos externos
-            let g = this.make.graphics();
-            // Mapa Político (Gris claro)
-            g.fillStyle(0xdddddd); g.fillRect(0, 0, 1280, 720);
-            g.fillStyle(0xbbbbbb); g.fillCircle(640, 360, 250);
-            g.generateTexture('map_political', 1280, 720);
-            // Mapa Físico (Verde claro)
-            g.clear();
-            g.fillStyle(0xd5e8d4); g.fillRect(0, 0, 1280, 720);
-            g.fillStyle(0x82b366); g.fillCircle(640, 360, 250);
-            g.generateTexture('map_physical', 1280, 720);
-        }
-        create() { this.scene.start('MapScene'); }
-    }
-
-    // --- 3. ESCENA DEL MAPA ---
-    class MapScene extends Phaser.Scene {
-        constructor() { super('MapScene'); }
-        create() {
-            this.map = this.add.image(640, 360, 'map_political');
-            this.add.text(640, 50, 'NEPAL: School DocFest', { fontSize: '42px', color: '#c0392b', fontStyle: 'bold' }).setOrigin(0.5);
-
-            // Botones de cambio de mapa
-            this.createBtn(150, 620, 'POLITICAL MAP', () => this.map.setTexture('map_political'));
-            this.createBtn(150, 660, 'PHYSICAL MAP', () => this.map.setTexture('map_physical'));
-
-            // Pines de expertos
-            Object.values(GAME_DATA.experts).forEach(exp => {
-                let pin = this.add.circle(exp.mapX, exp.mapY, 25, exp.color).setInteractive({ useHandCursor: true });
-                this.add.text(exp.mapX, exp.mapY + 35, exp.role, { fontSize: '14px', color: '#000', backgroundColor: '#fff' }).setOrigin(0.5);
-                
-                pin.on('pointerdown', () => this.scene.start('ExpertScene', { expert: exp }));
-            });
-        }
-        createBtn(x, y, txt, cb) {
-            this.add.text(x, y, txt, { fontSize: '20px', color: '#fff', backgroundColor: '#333', padding: 5 })
-                .setInteractive({ useHandCursor: true }).on('pointerdown', cb);
-        }
-    }
-
-    // --- 4. ESCENA DEL EXPERTO ---
-    class ExpertScene extends Phaser.Scene {
-        constructor() { super('ExpertScene'); }
-        init(data) { this.expert = data.expert; }
-        create() {
-            this.add.rectangle(640, 360, 1100, 600, 0xffffff).setStrokeStyle(4, this.expert.color);
-            this.add.rectangle(640, 100, 1100, 80, this.expert.color);
-            this.add.text(120, 85, this.expert.role + ": " + this.expert.name, { fontSize: '28px', color: '#fff' });
-
-            // Botón Cerrar
-            let close = this.add.text(1130, 85, 'X', { fontSize: '32px', color: '#fff' }).setInteractive({ useHandCursor: true });
-            close.on('pointerdown', () => this.scene.start('MapScene'));
-
-            // Botón Quiz
-            let qBtn = this.add.rectangle(300, 400, 250, 100, 0xeeeeee).setInteractive({ useHandCursor: true });
-            this.add.text(300, 400, 'OPENING QUIZ', { color: '#000', fontSize: '20px' }).setOrigin(0.5);
-            qBtn.on('pointerdown', () => this.scene.start('QuizScene', { expert: this.expert }));
-
-            // Video (Iframe DOM)
-            let videoHTML = `<iframe width="500" height="300" src="https://www.youtube.com/embed/${this.expert.youtubeId}" frameborder="0" allowfullscreen></iframe>`;
-            this.add.dom(800, 400).createFromHTML(videoHTML);
-        }
-    }
-
-    // --- 5. ESCENA DEL QUIZ ---
-    class QuizScene extends Phaser.Scene {
-        constructor() { super('QuizScene'); }
-        init(data) { this.expert = data.expert; }
-        create() {
-            this.add.rectangle(640, 360, 1280, 720, 0xf9f9f9);
-            const q = this.expert.quiz[0];
-            if(!q) { 
-                this.add.text(640, 360, "No quiz for this expert yet", {color: '#000'}).setOrigin(0.5);
-                setTimeout(() => this.scene.start('MapScene'), 2000);
-                return;
-            }
-
-            this.add.text(100, 100, q.recipe, { fontSize: '22px', color: '#333', wordWrap: { width: 400 } });
-
-            q.options.forEach((opt, i) => {
-                let btn = this.add.rectangle(700 + (i % 2 * 200), 200 + (Math.floor(i/2) * 200), 180, 180, opt.color).setInteractive({ useHandCursor: true });
-                this.add.text(700 + (i % 2 * 200), 200 + (Math.floor(i/2) * 200), opt.text, { fontSize: '20px' }).setOrigin(0.5);
-                
-                btn.on('pointerdown', () => {
-                    if(opt.correct) {
-                        this.add.text(640, 600, "CORRECT!", { fontSize: '60px', color: '#2ecc71' }).setOrigin(0.5);
-                    } else {
-                        this.add.text(640, 600, "WRONG!", { fontSize: '60px', color: '#e74c3c' }).setOrigin(0.5);
-                    }
-                    this.time.delayedCall(1500, () => this.scene.start('MapScene'));
-                });
-            });
-        }
-    }
-
-    // --- 6. CONFIGURACIÓN FINAL ---
-    const config = {
-        type: Phaser.AUTO,
-        width: 1280,
-        height: 720,
-        parent: 'game-container',
-        dom: { createContainer: true }, // Esto permite ver el video de Youtube
-        scene: [BootScene, MapScene, ExpertScene, QuizScene]
-    };
-
-    new Phaser.Game(config);
-    </script>
+    <script src="src/data.js"></script>
+    <script src="src/scenes/BootScene.js"></script>
+    <script src="src/scenes/MapScene.js"></script>
+    <script src="src/scenes/ExpertScene.js"></script>
+    <script src="src/scenes/QuizScene.js"></script>
+    <script src="src/main.js"></script>
 </body>
 </html>
