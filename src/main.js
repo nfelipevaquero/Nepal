@@ -3,13 +3,11 @@ const config = {
     width: 1280,
     height: 720,
     parent: 'game-container',
-    backgroundColor: '#ffffff',
-    dom: { createContainer: true },
+    backgroundColor: '#f4f7f6',
+    dom: { createContainer: true }, // Crítico para usar vídeos
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.FIT, // Mantiene proporción y escala DOM
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: 1280,
-        height: 720
     },
     scene: [BootScene, MapScene, ExpertScene, QuizScene]
 };

@@ -3,11 +3,15 @@ const GAME_DATA = {
         food: {
             id: 'food',
             role: 'Food Expert',
-            name: 'Kavita Gurung',
-            mapX: 635, 
-            mapY: 285,
+            name: 'KAVITA GURUNG',
+            location: 'Pokhara - Province 4',
             color: 0xc0392b,
-            youtubeId: '7X9G_S_8f0s' // <--- SOLO EL ID
+            mapX: 635, mapY: 285,
+            videos: {
+                start: 'VKc3PrVm8sE',
+                closing: 'kuPDXB72JpI',
+                next: 'HJwmpnUxaKU'
+            }
         }
     }
 };

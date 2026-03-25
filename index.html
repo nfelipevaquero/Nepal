@@ -6,9 +6,23 @@
     <style>
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #ffffff; overflow: hidden; 
+            background: #f4f7f6; /* Fondo moderno claro */
+            overflow: hidden; display: flex; justify-content: center; align-items: center; 
         }
-        #game-container { width: 100vw; height: 100vh; }
+        
+        #game-container { 
+            /* Esto mantiene el DOM (vídeos) pegado al canvas de Phaser */
+            position: relative; 
+            width: 100vw; height: 100vh;
+        }
+
+        /* Estilo moderno y redondo para los vídeos */
+        iframe {
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            /* Evitamos que el navegador añada márgenes */
+            border: none;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
