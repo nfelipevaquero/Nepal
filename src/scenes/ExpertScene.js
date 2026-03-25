@@ -1,27 +1,38 @@
 class ExpertScene extends Phaser.Scene {
     constructor() { super('ExpertScene'); }
-
     init(data) { this.expert = data.expert; }
 
     create() {
-        // Fondo rojo de la ficha
-        this.add.rectangle(640, 360, 1100, 600, 0xffffff).setStrokeStyle(10, 0xc0392b);
-        this.add.rectangle(640, 100, 1100, 100, 0xc0392b);
+        // Estética
+        this.add.rectangle(640, 360, 1150, 650, 0xffffff).setStrokeStyle(6, this.expert.color);
+        this.add.rectangle(640, 100, 1150, 100, this.expert.color);
+        this.add.text(120, 85, this.expert.role.toUpperCase(), { 
+            fontSize: '40px', color: '#fff', fontStyle: 'bold', fontFamily: 'Courier' 
+        });
 
-        this.add.text(120, 80, this.expert.role, { fontSize: '32px', color: '#fff', fontStyle: 'bold' });
-        this.add.text(120, 120, this.expert.name + " | " + this.expert.location, { fontSize: '20px', color: '#fff' });
-
-        // Botón Cerrar
-        let close = this.add.text(1130, 80, 'X', { fontSize: '40px', color: '#fff' }).setInteractive({ useHandCursor: true });
+        // Botón cerrar
+        let close = this.add.text(1150, 85, 'X', { fontSize: '50px', color: '#fff' })
+            .setOrigin(0.5).setInteractive({ useHandCursor: true });
         close.on('pointerdown', () => this.scene.start('MapScene'));
 
-        // Botón Actividad
-        let actBtn = this.add.rectangle(250, 400, 200, 100, 0xeeeeee).setInteractive({ useHandCursor: true });
-        this.add.text(250, 400, 'OPENING\nACTIVITY', { color: '#000', align: 'center' }).setOrigin(0.5);
-        actBtn.on('pointerdown', () => this.scene.start('QuizScene', { expert: this.expert }));
+        // CONSTRUCTOR DE URL YOUTUBE EMBED (Best Practices)
+        const videoId = this.expert.youtubeId;
+        // Parámetros: rel=0 (no relacionados), showinfo=0 (menos info)
+        const embedUrl = `https://www.youtube.com/watch?v=kuPDXB72JpI&list=TLGGtbHLgqzUymAyNTAzMjAyNg&t=1s`;
 
-        // Video de YouTube
-        let videoHTML = `<iframe width="500" height="300" src="https://www.youtube.com/embed/${this.expert.youtubeId}" frameborder="0" allowfullscreen></iframe>`;
-        this.add.dom(750, 400).createFromHTML(videoHTML);
+        const videoHTML = `
+            <div style="width: 800px; height: 450px; background: #000; display: flex; justify-content: center; align-items: center; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+                <iframe 
+                    width="800" 
+                    height="450" 
+                    src="${embedUrl}" 
+                    title="Entrevista Experto"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+            </div>`;
+
+        this.add.dom(640, 400).createFromHTML(videoHTML);
     }
 }
