@@ -38,5 +38,24 @@ class MapScene extends Phaser.Scene {
                 repeat: -1
             });
         });
+        const loginBtn = this.add.text(50, 670, "🏫 School Login", {
+        fontSize: '20px', 
+        color: '#ffffff', 
+        backgroundColor: '#e67e22', // Naranja para que resalte
+        padding: { x: 15, y: 10 },
+        fontStyle: 'bold'
+        })
+        .setInteractive({ useHandCursor: true })
+        .setDepth(1000); // Esto lo pone por encima de cualquier imagen de fondo o pin
+
+        loginBtn.on('pointerdown', () => {
+        let pass = prompt("Introduce la contraseña del colegio:");
+        if (pass === "1234") {
+            alert("Sesión iniciada correctamente.");
+            this.registry.set('isLoggedIn', true); 
+        } else {
+            alert("Contraseña incorrecta.");
+        }
+        });
     }
 }

@@ -1,135 +1,145 @@
 class ExpertScene extends Phaser.Scene {
     constructor() { super('ExpertScene'); }
-    init(data) { this.expert = data.expert; }
+    
+    init(data) { 
+        localStorage.setItem('currentScene', 'ExpertScene');
+        this.expert = data.expert || {
+            role: "FOOD EXPERT", name: "KAVITA GURUNG", location: "Pokhara", color: 0x922b21,
+            videos: { start: "q7HNoX9Lp8A", closing: "q7HNoX9Lp8A", next: "q7HNoX9Lp8A" }
+        };
+    }
 
     create() {
-        // Fondo base
-        this.add.rectangle(640, 360, 1280, 720, 0xf4f7f6);
+        const { width, height } = this.scale;
+        this.add.rectangle(width/2, height/2, width, height, 0xf4f7f6);
         
         // --- 1. HEADER ---
         const header = this.add.graphics();
         header.fillGradientStyle(this.expert.color, this.expert.color, 0x922b21, 0x922b21, 1);
-        header.fillRect(0, 0, 1280, 110);
+        header.fillRect(0, 0, width, 110);
+        this.add.text(120, 35, this.expert.role, { fontSize: '34px', fontStyle: 'bold', color: '#fff' });
 
-        this.add.text(120, 35, "FOOD EXPERT", { 
-            fontSize: '34px', fontStyle: 'bold', color: '#fff', fontFamily: 'Arial Black'
+        const closeX = this.add.text(width - 60, 55, '✕', { fontSize: '40px', color: '#fff', fontStyle: 'bold' })
+            .setOrigin(0.5).setInteractive({ useHandCursor: true });
+        closeX.on('pointerdown', () => {
+            localStorage.setItem('currentScene', 'MapScene');
+            this.scene.start('MapScene');
         });
-        this.add.text(120, 75, "KAVITA GURUNG | Pokhara - Province 4", { 
-            fontSize: '18px', color: '#eee', fontFamily: 'Arial'
-        });
 
-        const closeX = this.add.text(1220, 55, '✕', { 
-            fontSize: '40px', color: '#fff', fontStyle: 'bold' 
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        closeX.on('pointerdown', () => this.scene.start('MapScene'));
-
-        // --- 2. TARJETAS Y VÍDEOS ---
+        // --- 2. TARJETAS ---
         const videoY = 320; 
-
         this.createCard(235, 350, 370, 400, "START", this.expert.videos.start, videoY);
         this.createCard(1045, 350, 370, 400, "NEXT STAGE", this.expert.videos.next, videoY);
         this.createCard(640, 420, 420, 560, "CLOSING ACTIVITY", this.expert.videos.closing, videoY, true);
 
-        // --- 3. SECCIÓN INFERIOR (Opening Activity) ---
+        // --- 3. FOOTER ---
         const footerY = 640;
-        const footerX = 235;
-        const footerW = 370;
-        const footerH = 135;
-        
-        const footerBg = this.add.graphics();
-        footerBg.fillStyle(0xffffff, 1);
-        footerBg.fillRoundedRect(footerX - footerW/2, footerY - footerH/2, footerW, footerH, 20);
-        footerBg.lineStyle(1.5, 0x0000ff, 0.1); 
-        footerBg.strokeRoundedRect(footerX - footerW/2, footerY - footerH/2, footerW, footerH, 20);
+        this.createOpeningBox(235, footerY);
 
-        this.add.text(footerX, footerY - 40, "Opening Activity", { 
-            fontSize: '22px', color: '#e67e22', fontStyle: 'bold' 
-        }).setOrigin(0.5);
-
-        // ICONOS: Definición ultra nítida
-        this.createIcon(footerX - 60, footerY + 20, '🔑', () => this.showPopup());
-        this.createIcon(footerX + 60, footerY + 20, '✏️', () => window.open('https://docs.google.com', '_blank'));
-
-        // BOTÓN SIGUIENTE: Círculo naranja nítido
-        const nextCircle = this.add.circle(1045, footerY, 50, 0xe67e22)
-            .setInteractive({ useHandCursor: true })
-            .setStrokeStyle(1, 0xe67e22, 1); // El stroke fuerza el antialiasing
-        
+        const nextBtn = this.add.circle(1045, footerY, 50, 0xe67e22).setInteractive({ useHandCursor: true }).setStrokeStyle(2, 0xe67e22);
         this.add.text(1045, footerY, '➔', { fontSize: '45px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
-        nextCircle.on('pointerdown', () => this.scene.start('QuizScene'));
-    }
-
-    createIcon(x, y, emoji, action) {
-        // Círculo rosa con técnica de suavizado de bordes
-        const circle = this.add.circle(x, y, 35, 0xff77ff)
-            .setInteractive({ useHandCursor: true })
-            .setStrokeStyle(1, 0xff77ff, 1); // Esto elimina el pixelado del borde
-        
-        // Emoji con padding para que no se corte por arriba/lados
-        this.add.text(x, y, emoji, { 
-            fontSize: '32px',
-            padding: { top: 10, bottom: 10, left: 10, right: 10 }
-        }).setOrigin(0.5);
-
-        circle.on('pointerdown', action);
-    }
-
-    createCard(x, y, w, h, title, videoId, vY, isCenter = false) {
-        const g = this.add.graphics();
-        g.fillStyle(0xffffff, 1).fillRoundedRect(x - w/2, y - h/2, w, h, 20);
-        g.lineStyle(1.5, 0x0000ff, 0.1).strokeRoundedRect(x - w/2, y - h/2, w, h, 20);
-        
-        this.add.text(x, y - h/2 + 35, title, { 
-            fontSize: '22px', color: '#e67e22', fontStyle: 'bold' 
-        }).setOrigin(0.5);
-        
-        const vidW = w - 40;
-        const vidH = (vidW * 9) / 16;
-        const videoHTML = `<iframe width="${vidW}" height="${vidH}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" style="border-radius:12px;"></iframe>`;
-        this.add.dom(x, vY).createFromHTML(videoHTML);
-
-        if (isCenter) {
-            this.renderPhrases(x, vY + vidH/2 + 40, w);
-        }
-    }
-
-    renderPhrases(x, startY, w) {
-        const c = { d: "#f1c40f", r: "#e74c3c", v: "#2ecc71", n: "#333333", a: "#3f37c9" };
-        const lines = [
-            [{t:"WHAT ", c:c.d}, {t:"DO ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"COMMONLY ", c:c.n}, {t:"EAT?", c:c.a}],
-            [{t:"HOW ", c:c.d}, {t:"DO ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"COMMONLY ", c:c.n}, {t:"EAT?", c:c.a}],
-            [{t:"WHAT ", c:c.d}, {t:"DO ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"DRINK?", c:c.a}],
-            [{t:"HOW ", c:c.d}, {t:"DO ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"COOK?", c:c.a}],
-            [{t:"WHAT FRUITS ", c:c.d}, {t:"DO ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"EAT?", c:c.a}],
-            [{t:"WHAT ", c:c.d}, {t:"DON'T ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"EAT?", c:c.a}],
-            [{t:"DO ", c:c.r}, {t:"NEPALESE ", c:c.v}, {t:"DRINK ", c:c.a}, {t:"ALCOHOL AND ", c:c.n}, {t:"SMOKE?", c:c.a}]
-        ];
-
-        lines.forEach((line, i) => {
-            let curX = x - w/2 + 35;
-            line.forEach(word => {
-                const t = this.add.text(curX, startY + (i * 28), word.t, { 
-                    fontSize: '14px', color: word.c, fontStyle: 'bold', fontFamily: 'Arial Narrow' 
-                });
-                curX += t.width;
-            });
+        nextBtn.on('pointerdown', () => {
+            localStorage.setItem('currentScene', 'QuizScene');
+            this.scene.start('QuizScene');
         });
     }
 
+    createIcon(x, y, emoji, action) {
+    // Círculo de fondo (se queda igual)
+    const circle = this.add.circle(x, y, 35, 0xff77ff)
+        .setInteractive({ useHandCursor: true })
+        .setStrokeStyle(2, 0xff77ff);
+    
+    // El texto del emoji con protección de bordes y alta resolución
+    const txt = this.add.text(x, y, emoji, { 
+        fontSize: '32px',
+        fontFamily: 'serif', // Ayuda a que algunos navegadores rendericen mejor el glifo
+        padding: { left: 15, right: 15, top: 15, bottom: 15 } // Espacio de seguridad para no cortar
+    }).setOrigin(0.5);
+
+    // ESTO ES LO MÁS IMPORTANTE PARA LA NITIDEZ:
+    // Forzamos a Phaser a dibujar el emoji al doble de resolución del canvas
+    txt.setResolution(2); 
+
+    circle.on('pointerdown', action);
+}
+
     showPopup() {
+        // En lugar de inyectar en el body, usamos el sistema DOM de Phaser pero con dimensiones relativas al canvas
         const popupHTML = `
-            <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; justify-content:center; align-items:center;">
-                <div style="background:white; width:550px; padding:40px; border-radius:25px; position:relative; font-family:sans-serif; border: 2px solid #e67e22;">
-                    <span id="close-pop" style="position:absolute; right:20px; top:15px; cursor:pointer; font-size:30px; color:#999;">✕</span>
-                    <h2 style="color:#e67e22; margin-top:0;">Starting sentences:</h2>
-                    <ul style="font-size:18px; line-height:2; color:#333;">
+            <div style="
+                width: 1280px; height: 720px; 
+                display: flex; justify-content: center; align-items: center; 
+                background: rgba(0,0,0,0.8); pointer-events: auto;">
+                
+                <div style="
+                    background: white; width: 600px; padding: 50px; 
+                    border-radius: 30px; border: 5px solid #e67e22; 
+                    position: relative; font-family: sans-serif;">
+                    
+                    <button id="close-btn" style="
+                        position: absolute; right: 20px; top: 15px; 
+                        background: none; border: none; font-size: 35px; 
+                        cursor: pointer; color: #999;">✕</button>
+                    
+                    <h2 style="color: #e67e22; margin-top: 0; font-size: 32px;">Starting sentences:</h2>
+                    <ul style="font-size: 20px; line-height: 2; color: #333; font-weight: bold; padding-left: 20px;">
                         <li>"We think the recipe ___ matches to the photo ___ because..."</li>
                         <li>"We agree"</li>
                         <li>"We don't agree because..."</li>
                     </ul>
                 </div>
             </div>`;
-        const pop = this.add.dom(0, 0).createFromHTML(popupHTML).setOrigin(0);
-        document.getElementById('close-pop').onclick = () => pop.destroy();
+
+        const pop = this.add.dom(640, 360).createFromHTML(popupHTML);
+        pop.setDepth(100); // Nos aseguramos de que esté por encima de todo
+
+        // Listener de cierre integrado
+        const btn = document.getElementById('close-btn');
+        if(btn) btn.onclick = () => pop.destroy();
+    }
+
+    createCard(x, y, w, h, title, videoId, vY, isCenter = false) {
+        const g = this.add.graphics();
+        g.fillStyle(0xffffff, 1).fillRoundedRect(x - w/2, y - h/2, w, h, 20);
+        g.lineStyle(2, 0x0000ff, 0.1).strokeRoundedRect(x - w/2, y - h/2, w, h, 20);
+        this.add.text(x, y - h/2 + 35, title, { fontSize: '22px', color: '#e67e22', fontStyle: 'bold' }).setOrigin(0.5);
+        
+        // Iframe con tamaño corregido
+        const videoHTML = `<iframe width="${w-40}" height="${((w-40)*9)/16}" src="https://www.youtube.com/embed/${videoId}" frameborder="0" style="border-radius:12px;"></iframe>`;
+        this.add.dom(x, vY).createFromHTML(videoHTML);
+
+        if (isCenter) this.renderPhrases(x, vY + 140, w);
+    }
+
+    createOpeningBox(x, y) {
+        const g = this.add.graphics();
+        g.fillStyle(0xffffff, 1).fillRoundedRect(x-185, y-67, 370, 135, 20);
+        g.lineStyle(2, 0x0000ff, 0.1).strokeRoundedRect(x-185, y-67, 370, 135, 20);
+        this.add.text(x, y - 40, "Opening Activity", { fontSize: '22px', color: '#e67e22', fontStyle: 'bold' }).setOrigin(0.5);
+        this.createIcon(x - 65, y + 25, '🔑', () => this.showPopup());
+        this.createIcon(x + 65, y + 25, '✏️', () => window.open('https://docs.google.com', '_blank'));
+    }
+
+    renderPhrases(x, startY, w) {
+        const colors = ["#f1c40f", "#e74c3c", "#2ecc71", "#333333", "#3f37c9"];
+        const lines = [
+            ["WHAT", "DO", "NEPALESE", "COMMONLY", "EAT?"],
+            ["HOW", "DO", "NEPALESE", "COMMONLY", "EAT?"],
+            ["WHAT", "DO", "NEPALESE", "DRINK?"],
+            ["HOW", "DO", "NEPALESE", "COOK?"],
+            ["WHAT FRUITS", "DO", "NEPALESE", "EAT?"],
+            ["WHAT", "DON'T", "NEPALESE", "EAT?"],
+            ["DO", "NEPALESE", "DRINK", "ALCOHOL AND", "SMOKE?"]
+        ];
+        lines.forEach((line, i) => {
+            let curX = x - w/2 + 35;
+            line.forEach((word, j) => {
+                const t = this.add.text(curX, startY + (i * 28), word + " ", { 
+                    fontSize: '14px', color: colors[j] || "#333", fontStyle: 'bold', fontFamily: 'Arial Narrow' 
+                });
+                curX += t.width;
+            });
+        });
     }
 }
