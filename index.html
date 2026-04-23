@@ -2,37 +2,97 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Nepal School DocFest</title>
-    <style>
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: #f4f7f6; /* Fondo moderno claro */
-            overflow: hidden; display: flex; justify-content: center; align-items: center; 
-        }
-        
-        #game-container { 
-            /* Esto mantiene el DOM (vídeos) pegado al canvas de Phaser */
-            position: relative; 
-            width: 100vw; height: 100vh;
-        }
-
-        /* Estilo moderno y redondo para los vídeos */
-        iframe {
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            /* Evitamos que el navegador añada márgenes */
-            border: none;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nepal Interactive Map</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="game-container"></div>
-    <script src="src/data.js"></script>
-    <script src="src/scenes/BootScene.js"></script>
-    <script src="src/scenes/MapScene.js"></script>
-    <script src="src/scenes/ExpertScene.js"></script>
-    <script src="src/scenes/QuizScene.js"></script>
-    <script src="src/main.js"></script>
+
+    <div id="map-screen" class="screen">
+        <div class="map-wrapper">
+            <img src="Nepal-Map-ToPrint.png" class="map-bg" alt="Nepal Map">
+            
+            <button class="pin expert-trigger" style="top: 45%; left: 52%;" onclick="changeScreen('expert-screen')">
+                <span class="pin-icon">📍</span>
+                <span class="pin-label">Kavita (Food)</span>
+            </button>
+        </div>
+
+        <button id="login-btn" onclick="doLogin()">🏫 School Login</button>
+    </div>
+
+    <div id="expert-screen" class="screen hidden">
+        <header>
+            <div class="header-titles">
+                <h1>FOOD EXPERT</h1>
+                <p>KAVITA GURUNG | <span>Pokhara - Province 4</span></p>
+            </div>
+            <button class="close-btn" onclick="changeScreen('map-screen')">✕</button>
+        </header>
+
+        <main class="main-content">
+            <div class="video-row">
+                <div class="card">
+                    <div class="card-tag">STEP 1</div>
+                    <h3>START</h3>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/q7HNoX9Lp8A" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="card highlight">
+                    <div class="card-tag">ACTIVITY</div>
+                    <h3>CLOSING</h3>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/q7HNoX9Lp8A" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-tag">STEP 2</div>
+                    <h3>NEXT STAGE</h3>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/q7HNoX9Lp8A" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-content">
+                <div class="phrases-box">
+                    <div class="phrases">
+                        <p><span class="yellow">WHAT</span> <span class="red">DO</span> <span class="green">NEPALESE</span> <span class="gray">COMMONLY</span> <span class="blue">EAT?</span></p>
+                        <p><span class="yellow">HOW</span> <span class="red">DO</span> <span class="green">NEPALESE</span> <span class="gray">COMMONLY</span> <span class="blue">EAT?</span></p>
+                        <p><span class="yellow">WHAT</span> <span class="red">DO</span> <span class="green">NEPALESE</span> <span class="blue">DRINK?</span></p>
+                    </div>
+                </div>
+
+                <div class="opening-activity">
+                    <h4>Opening Activity</h4>
+                    <div class="icons-group">
+                        <button class="circle-btn" onclick="openPopup()">🔑</button>
+                        <button class="circle-btn" onclick="window.open('https://docs.google.com')">✏️</button>
+                    </div>
+                </div>
+
+                <button class="next-arrow-btn" onclick="alert('Quiz Loading...')">➔</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="pop-overlay" class="overlay" onclick="closePopup()">
+        <div class="popup" onclick="event.stopPropagation()">
+            <button class="close-pop" onclick="closePopup()">✕</button>
+            <h2>Starting sentences</h2>
+            <div class="popup-line"></div>
+            <ul>
+                <li>"We think the recipe ___ matches..."</li>
+                <li>"We agree"</li>
+                <li>"We don't agree because..."</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
