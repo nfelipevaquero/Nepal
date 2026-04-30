@@ -3,92 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal Interactive Map</title>
+    <title>Nepal DocFest | Slide Experience</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="map-screen" class="screen">
-        <div class="map-wrapper">
-            <img src="Nepal-Map-ToPrint.png" class="map-bg" alt="Nepal Map">
-            
-            <button class="pin expert-trigger" style="top: 45%; left: 52%;" onclick="changeScreen('expert-screen')">
-                <span class="pin-icon">📍</span>
-                <span class="pin-label">Kavita (Food)</span>
-            </button>
+    <div class="app-container">
+        <!-- 1. PANTALLA INTRO -->
+        <div id="intro-screen" class="screen active">
+            <!-- LÍNEA PARA TU GIF -->
+            <img src="Nepal-gif.gif" class="intro-gif" alt="Intro Animation">
+            <button class="skip-btn" onclick="startApp()">SALTAR INTRO ➔</button>
         </div>
 
-        <button id="login-btn" onclick="doLogin()">🏫 School Login</button>
-    </div>
-
-    <div id="expert-screen" class="screen hidden">
-        <header>
-            <div class="header-titles">
-                <h1>FOOD EXPERT</h1>
-                <p>KAVITA GURUNG | <span>Pokhara - Province 4</span></p>
+        <!-- 2. PANTALLA MAPA -->
+        <div id="map-screen" class="screen next">
+            <div class="map-full-container">
+                <img src="Nepal-Map-ToPrint.png" class="map-img-fit" alt="Nepal Map">
+                
+                <!-- Todos los Expertos -->
+                <button class="pin" style="top: 10%; left: 16%;" onclick="openExpert('Language Expert', '#e74c3c')">
+                    <div class="pin-box">Language Expert</div>
+                </button>
+                <button class="pin" style="top: 12%; left: 28%;" onclick="openExpert('Biodiversity Expert', '#e74c3c')">
+                    <div class="pin-box">Biodiversity Expert</div>
+                </button>
+                <button class="pin" style="top: 35%; left: 52%;" onclick="openExpert('Food Expert', '#e67e22')">
+                    <div class="pin-box">Food Expert</div>
+                </button>
+                <button class="pin" style="top: 45%; left: 40%;" onclick="openExpert('Culture Expert', '#e74c3c')">
+                    <div class="pin-box">Culture Expert</div>
+                </button>
+                <button class="pin" style="top: 72%; left: 58%;" onclick="openExpert('Festivals Expert', '#e74c3c')">
+                    <div class="pin-box">Festivals Expert</div>
+                </button>
+                <button class="pin" style="top: 85%; left: 69%;" onclick="openExpert('Economy Expert', '#e74c3c')">
+                    <div class="pin-box">Economy Expert</div>
+                </button>
+                <button class="pin" style="top: 48%; left: 86%;" onclick="openExpert('Geography Expert', '#e74c3c')">
+                    <div class="pin-box">Geography Expert</div>
+                </button>
             </div>
-            <button class="close-btn" onclick="changeScreen('map-screen')">✕</button>
-        </header>
+            <button id="login-btn" onclick="doLogin()">🏫 School Login</button>
+        </div>
 
-        <main class="main-content">
-            <div class="video-row">
-                <div class="card">
-                    <div class="card-tag">STEP 1</div>
-                    <h3>START</h3>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/q7HNoX9Lp8A" allowfullscreen></iframe>
+        <!-- 3. PANTALLA EXPERTO -->
+        <div id="expert-screen" class="screen next">
+            <header id="dynamic-header">
+                <div class="header-titles">
+                    <h1 id="expert-title">EXPERTO</h1>
+                    <p>SCHOOL DOCFEST | <span>Nepal Expedition</span></p>
+                </div>
+                <button class="close-btn" onclick="closeExpert()">✕</button>
+            </header>
+
+            <main class="main-content">
+                <div class="video-row">
+                    <div class="card anim-slide-up" style="animation-delay: 0.2s;">
+                        <div class="card-tag">STEP 1</div>
+                        <div class="video-container"><iframe id="video-1" src="" allowfullscreen></iframe></div>
+                    </div>
+                    <div class="card highlight anim-slide-up" style="animation-delay: 0.4s;">
+                        <div class="card-tag">ACTIVITY</div>
+                        <div class="video-container"><iframe id="video-2" src="" allowfullscreen></iframe></div>
+                    </div>
+                    <div class="card anim-slide-up" style="animation-delay: 0.6s;">
+                        <div class="card-tag">STEP 2</div>
+                        <div class="video-container"><iframe id="video-3" src="" allowfullscreen></iframe></div>
                     </div>
                 </div>
 
-                <div class="card highlight">
-                    <div class="card-tag">ACTIVITY</div>
-                    <h3>CLOSING</h3>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/q7HNoX9Lp8A" allowfullscreen></iframe>
+                <div class="bottom-content anim-slide-up" style="animation-delay: 0.8s;">
+                    <div class="phrases-box">
+                        <p class="phrases">
+                            <span class="yellow">WHAT</span> <span class="red">DO</span> 
+                            <span class="green">NEPALESE</span> <span class="blue">EAT?</span>
+                        </p>
                     </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-tag">STEP 2</div>
-                    <h3>NEXT STAGE</h3>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/q7HNoX9Lp8A" allowfullscreen></iframe>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottom-content">
-                <div class="phrases-box">
-                    <div class="phrases">
-                        <p><span class="yellow">WHAT</span> <span class="red">DO</span> <span class="green">NEPALESE</span> <span class="gray">COMMONLY</span> <span class="blue">EAT?</span></p>
-                        <p><span class="yellow">HOW</span> <span class="red">DO</span> <span class="green">NEPALESE</span> <span class="gray">COMMONLY</span> <span class="blue">EAT?</span></p>
-                        <p><span class="yellow">WHAT</span> <span class="red">DO</span> <span class="green">NEPALESE</span> <span class="blue">DRINK?</span></p>
-                    </div>
-                </div>
-
-                <div class="opening-activity">
-                    <h4>Opening Activity</h4>
                     <div class="icons-group">
                         <button class="circle-btn" onclick="openPopup()">🔑</button>
                         <button class="circle-btn" onclick="window.open('https://docs.google.com')">✏️</button>
                     </div>
+                    <button class="next-arrow-btn">➔</button>
                 </div>
-
-                <button class="next-arrow-btn" onclick="alert('Quiz Loading...')">➔</button>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
+    <!-- POPUP -->
     <div id="pop-overlay" class="overlay" onclick="closePopup()">
         <div class="popup" onclick="event.stopPropagation()">
             <button class="close-pop" onclick="closePopup()">✕</button>
             <h2>Starting sentences</h2>
             <div class="popup-line"></div>
             <ul>
-                <li>"We think the recipe ___ matches..."</li>
-                <li>"We agree"</li>
-                <li>"We don't agree because..."</li>
+                <li>"We think that..."</li>
+                <li>"We agree with..."</li>
             </ul>
         </div>
     </div>
