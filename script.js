@@ -1,54 +1,90 @@
-// Temporizador de 20 segundos para la intro
-let introTimer = setTimeout(startApp, 20000);
+// Temporizador automático Intro
+let introTimer = setTimeout(startApp, 15000);
 
 function startApp() {
     clearTimeout(introTimer);
-    slideTransition('intro-screen', 'map-screen', 'left');
+    document.getElementById('intro-screen').classList.add('fade-out');
 }
 
+// Login & Ubicación
+function toggleLoginModal() { document.getElementById('login-modal').classList.toggle('active'); }
+function closeLocationSelector() { document.getElementById('loc-modal').classList.remove('active'); }
+function openLocationSelector() { document.getElementById('loc-modal').classList.add('active'); }
+
+function handleAuth() {
+    const user = document.getElementById('username').value.trim();
+    if (user) {
+        document.getElementById('user-name-text').innerText = user;
+        showToast("¡Hola, " + user + "!");
+        toggleLoginModal();
+    }
+}
+
+function setUserLocation(loc) {
+    document.getElementById('display-user-loc').innerText = loc;
+    showToast("Centro: " + loc);
+    closeLocationSelector();
+}
+
+// Navegación de Mapas (NOMBRES ACTUALIZADOS)
+function changeMap(type, event) {
+    const mapImg = document.getElementById('main-map-img');
+    const activities = document.getElementById('activities-layer');
+    const experts = document.getElementById('experts-layer');
+    const buttons = document.querySelectorAll('.nav-btn');
+
+    buttons.forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    if (type === 'political') {
+        mapImg.src = 'Nepal 2 political-map.png'; 
+        activities.style.display = 'none';
+        experts.style.display = 'none';
+    } else if (type === 'physical') {
+        mapImg.src = 'Nepal-Map-with-river-and-national-park-1.png';
+        activities.style.display = 'none';
+        experts.style.display = 'none';
+    } else if (type === 'teams') {
+        mapImg.src = 'Nepal-Map-ToPrint.png';
+        activities.style.display = 'none';
+        experts.style.display = 'block';
+    } else {
+        mapImg.src = 'Nepal-Map-ToPrint.png';
+        activities.style.display = 'block';
+        experts.style.display = 'block';
+    }
+}
+
+// Pantalla de Contenido (Expertos/Casas)
 function openExpert(name, color) {
     document.getElementById('expert-title').innerText = name.toUpperCase();
     document.getElementById('dynamic-header').style.backgroundColor = color;
     
-    const videoId = 'q7HNoX9Lp8A'; 
+    // IDs de ejemplo (puedes cambiarlos según el experto)
+    const videoId = "q7HNoX9Lp8A"; 
     document.getElementById('video-1').src = `https://www.youtube.com/embed/${videoId}`;
     document.getElementById('video-2').src = `https://www.youtube.com/embed/${videoId}`;
     document.getElementById('video-3').src = `https://www.youtube.com/embed/${videoId}`;
-
-    slideTransition('map-screen', 'expert-screen', 'left');
+    
+    document.getElementById('expert-screen').classList.add('active');
 }
 
 function closeExpert() {
-    slideTransition('expert-screen', 'map-screen', 'right');
-    // Limpiar videos después de la animación
+    document.getElementById('expert-screen').classList.remove('active');
+    // Limpiar videos para que dejen de sonar
+    document.getElementById('video-1').src = "";
+    document.getElementById('video-2').src = "";
+    document.getElementById('video-3').src = "";
+}
+
+function showToast(msg) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = msg;
+    container.appendChild(toast);
     setTimeout(() => {
-        document.querySelectorAll('iframe').forEach(f => f.src = "");
-    }, 800);
-}
-
-/**
- * Lógica de transición por deslizamiento
- * @param {string} currentId - ID de la pantalla actual
- * @param {string} nextId - ID de la pantalla a la que vamos
- * @param {string} direction - 'left' para avanzar, 'right' para retroceder
- */
-function slideTransition(currentId, nextId, direction) {
-    const current = document.getElementById(currentId);
-    const next = document.getElementById(nextId);
-
-    if (direction === 'left') {
-        current.classList.replace('active', 'prev');
-        next.classList.replace('next', 'active');
-    } else {
-        current.classList.replace('active', 'next');
-        next.classList.replace('prev', 'active');
-    }
-}
-
-function openPopup() { document.getElementById('pop-overlay').classList.add('active'); }
-function closePopup() { document.getElementById('pop-overlay').classList.remove('active'); }
-
-function doLogin() {
-    const p = prompt("Password:");
-    if(p === "1234") alert("✅ Acceso permitido");
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
 }
