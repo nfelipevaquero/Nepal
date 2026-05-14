@@ -41,7 +41,6 @@ const DEMO_SESSIONS = [
     { id: "demo-manresa",   displayName: "Escola Manresa",    color: "#e74c3c", center: "Amor Children's Home" },
 ];
 
-// Center positions match the activity pin tips
 const CENTER_POSITIONS = {
     "Amor Children's Home": { top: 40, left: 5 },
     "Amics del Nepal":      { top: 57, left: 62 },
@@ -271,17 +270,13 @@ function changeMap(type, event) {
         stage.classList.add('swapping');
     });
 
-    // Swap map content when ripple is at peak coverage
     setTimeout(() => {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         applyMapMode(type);
     }, 480);
 
-    // Restore stage clarity
     setTimeout(() => stage.classList.remove('swapping'), 700);
-
-    // Fade out and cleanup ripple
     setTimeout(() => ripple.classList.add('fade'), 600);
     setTimeout(() => ripple.remove(), 1200);
 }

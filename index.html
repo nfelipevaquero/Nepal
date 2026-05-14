@@ -17,23 +17,55 @@
     <div class="app-container">
 
         <div id="intro-screen" class="screen intro-layer active">
-            <button class="skip-btn-mini" onclick="startApp()">Skip ✕</button>
             <div class="map-stage-wrap">
                 <div class="map-stage intro-stage">
-                    <img src="Nepal-gif.gif" class="stage-media" alt="Intro Animation">
-                    <div class="intro-overlay"></div>
-                    <div class="intro-vignette"></div>
 
-                    <div class="intro-eyebrow">
-                        <span class="eyebrow-dot"></span>
-                        Edition 2025 · Live Now
+                    <!-- Decorative topographic pattern -->
+                    <svg class="intro-topo" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                        <defs>
+                            <pattern id="topo-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+                                <circle cx="60" cy="60" r="1" fill="currentColor"/>
+                                <circle cx="0" cy="0" r="1" fill="currentColor"/>
+                                <circle cx="120" cy="0" r="1" fill="currentColor"/>
+                                <circle cx="0" cy="120" r="1" fill="currentColor"/>
+                                <circle cx="120" cy="120" r="1" fill="currentColor"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#topo-pattern)"/>
+                    </svg>
+
+                    <!-- GIF as visual centerpiece -->
+                    <div class="intro-media-wrap">
+                        <img src="Nepal-gif.gif" class="intro-media" alt="Nepal animation">
                     </div>
 
+                    <!-- Skip in editorial corner style -->
+                    <button class="intro-skip" onclick="startApp()">
+                        Skip intro
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M5 12h14M13 6l6 6-6 6"/>
+                        </svg>
+                    </button>
+
+                    <!-- Top eyebrow -->
+                    <div class="intro-eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        <span>Edition 2025 · Live Now</span>
+                    </div>
+
+                    <!-- Top-right meta -->
+                    <div class="intro-meta">
+                        <span class="meta-label">Coordinates</span>
+                        <span class="meta-value">28.39°N · 84.12°E</span>
+                    </div>
+
+                    <!-- Main content -->
                     <div class="intro-content">
                         <h1 class="intro-heading">
-                            <span class="line line-1">Discover</span>
-                            <span class="line line-2"><em>Nepal</em></span>
+                            Discover<br>
+                            <em>Nepal.</em>
                         </h1>
+                        <div class="intro-accent-line"></div>
                         <p class="intro-lead">
                             An interactive journey through the culture, geography
                             and people of the Himalayas.
@@ -46,11 +78,17 @@
                         </button>
                     </div>
 
+                    <!-- Footer -->
                     <div class="intro-footer">
-                        <span>SCHOOL DOCFEST</span>
-                        <span class="dot-sep">·</span>
-                        <span>POWERED BY AMICS DEL NEPAL</span>
+                        <div class="intro-footer-line"></div>
+                        <div class="intro-footer-text">
+                            <span>School DocFest</span>
+                            <span class="dot-sep">·</span>
+                            <span>Powered by Amics del Nepal</span>
+                        </div>
+                        <div class="intro-footer-line"></div>
                     </div>
+
                 </div>
             </div>
         </div>
