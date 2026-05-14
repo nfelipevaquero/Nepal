@@ -5,17 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nepal DocFest | Mapa Interactivo</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="toast-container"></div>
 
     <div class="app-container">
-        
+
         <div id="intro-screen" class="screen intro-layer active">
             <button class="skip-btn" onclick="startApp()">SALTAR INTRO ➔</button>
             <img src="Nepal-gif.gif" class="intro-gif" alt="Intro Animation">
+            <div class="intro-overlay"></div>
+            <div class="intro-title">
+                <p>School DocFest · Nepal Expedition</p>
+                <h1>Descubre <span class="accent">Nepal</span></h1>
+            </div>
         </div>
 
         <div id="map-screen" class="screen map-layer">
@@ -32,28 +39,49 @@
                 <img src="Nepal-Map-ToPrint.png" id="main-map-img" class="map-img-fit" alt="Nepal Map">
 
                 <div id="activities-layer">
-                    <div class="marker-group" style="top: 32.5%; left: 8.6%;">
-                        <button class="box orange-big" onclick="openExpert('Amor Children\'s Home', '#e67e22')">Amor Children's Home</button>
+                    <div class="marker-group" style="top: 33%; left: 14%;">
+                        <button class="box orange-big" onclick="openExpert('Amor Children\'s Home', '#e8773c')">Amor Children's Home</button>
                         <div class="pointer"></div>
                     </div>
-                    <div class="marker-group" style="top: 55.4%; left: 66.8%;">
-                        <button class="box orange-big" onclick="openExpert('Amics del Nepal', '#e67e22')">Amics del Nepal Activity Center</button>
+                    <div class="marker-group" style="top: 53%; left: 55%;">
+                        <button class="box orange-big" onclick="openExpert('Amics del Nepal', '#e8773c')">Amics del Nepal</button>
                         <div class="pointer"></div>
                     </div>
-                    <div class="marker-group" style="top: 83.5%; left: 85.6%;">
-                        <button class="box orange-big" onclick="openExpert('Purwanchal Bal Sewa', '#e67e22')">Purwanchal Bal Sewa Ashram</button>
+                    <div class="marker-group" style="top: 76%; left: 83%;">
+                        <button class="box orange-big" onclick="openExpert('Purwanchal Bal Sewa', '#e8773c')">Purwanchal Bal Sewa</button>
                         <div class="pointer"></div>
                     </div>
                 </div>
 
                 <div id="experts-layer">
-                    <div class="marker-group" style="top: 19.3%; left: 14.3%;"><button class="box red" onclick="openExpert('Language Expert', '#e74c3c')">Language Expert</button><div class="pointer"></div></div>
-                    <div class="marker-group" style="top: 21.6%; left: 24.6%;"><button class="box red" onclick="openExpert('Biodiversity Expert', '#e74c3c')">Biodiversity Expert</button><div class="pointer"></div></div>
-                    <div class="marker-group" style="top: 58.6%; left: 35.5%;"><button class="box red" onclick="openExpert('Culture Expert', '#e74c3c')">Culture Expert</button><div class="pointer"></div></div>
-                    <div class="marker-group" style="top: 48.2%; left: 47.7%;"><button class="box red" onclick="openExpert('Food Expert', '#e67e22')">Food Expert</button><div class="pointer"></div></div>
-                    <div class="marker-group" style="top: 74.4%; left: 63.8%;"><button class="box red" onclick="openExpert('Festivals Expert', '#e74c3c')">Festivals Expert</button><div class="pointer"></div></div>
-                    <div class="marker-group" style="top: 80.5%; left: 70.4%;"><button class="box red" onclick="openExpert('Economy Expert', '#e74c3c')">Economy Expert</button><div class="pointer"></div></div>
-                    <div class="marker-group" style="top: 61.2%; left: 80.4%;"><button class="box red" onclick="openExpert('Geography Expert', '#e74c3c')">Geography Expert</button><div class="pointer"></div></div>
+                    <div class="marker-group" style="top: 19.3%; left: 14.3%;">
+                        <button class="box red" onclick="openExpert('Language Expert', '#c8434d')">Language Expert</button>
+                        <div class="pointer"></div>
+                    </div>
+                    <div class="marker-group" style="top: 21.6%; left: 24.6%;">
+                        <button class="box red" onclick="openExpert('Biodiversity Expert', '#c8434d')">Biodiversity Expert</button>
+                        <div class="pointer"></div>
+                    </div>
+                    <div class="marker-group" style="top: 58.6%; left: 35.5%;">
+                        <button class="box red" onclick="openExpert('Culture Expert', '#c8434d')">Culture Expert</button>
+                        <div class="pointer"></div>
+                    </div>
+                    <div class="marker-group" style="top: 48.2%; left: 47.7%;">
+                        <button class="box red" onclick="openExpert('Food Expert', '#c8434d')">Food Expert</button>
+                        <div class="pointer"></div>
+                    </div>
+                    <div class="marker-group" style="top: 74.4%; left: 63.8%;">
+                        <button class="box red" onclick="openExpert('Festivals Expert', '#c8434d')">Festivals Expert</button>
+                        <div class="pointer"></div>
+                    </div>
+                    <div class="marker-group" style="top: 80.5%; left: 70.4%;">
+                        <button class="box red" onclick="openExpert('Economy Expert', '#c8434d')">Economy Expert</button>
+                        <div class="pointer"></div>
+                    </div>
+                    <div class="marker-group" style="top: 61.2%; left: 80.4%;">
+                        <button class="box red" onclick="openExpert('Geography Expert', '#c8434d')">Geography Expert</button>
+                        <div class="pointer"></div>
+                    </div>
                 </div>
 
                 <div class="bottom-nav">
@@ -69,7 +97,7 @@
             <header id="dynamic-header">
                 <div class="header-titles">
                     <h1 id="expert-title">CONTENIDO</h1>
-                    <p>SCHOOL DOCFEST | Nepal Expedition</p>
+                    <p>SCHOOL DOCFEST · Nepal Expedition</p>
                 </div>
                 <button class="close-content-btn" onclick="closeExpert()">✕ CERRAR</button>
             </header>
