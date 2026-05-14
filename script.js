@@ -1,5 +1,5 @@
 // ============================================================
-// FIREBASE — pega tu config aquí (paso 3 del setup)
+// FIREBASE — paste your config here
 // ============================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // ============================================================
-// USERS — lista cerrada de escuelas (edita libremente)
+// USERS — closed list of schools
 // ============================================================
 const USERS = {
     "barcelona":  { password: "nepal2025", displayName: "Escola Barcelona",   color: "#3498db" },
@@ -34,23 +34,40 @@ const USERS = {
 };
 
 // ============================================================
-// DEMO SESSIONS — auto-pobladas si Firestore está vacío
+// DEMO SESSIONS — auto-populated if Firestore is empty
 // ============================================================
 const DEMO_SESSIONS = [
-    { id: "demo-bcn",      displayName: "Escola Barcelona",  color: "#3498db", center: "Amics del Nepal" },
-    { id: "demo-girona",   displayName: "Institut Girona",   color: "#9b59b6", center: "Amor Children's Home" },
-    { id: "demo-tarragona",displayName: "Escola Tarragona",  color: "#16a085", center: "Purwanchal Bal Sewa" },
-    { id: "demo-lleida",   displayName: "Institut Lleida",   color: "#f39c12", center: "Amics del Nepal" },
-    { id: "demo-manresa",  displayName: "Escola Manresa",    color: "#e74c3c", center: "Amor Children's Home" },
+    { id: "demo-bcn",       displayName: "Escola Barcelona",  color: "#3498db", center: "Amics del Nepal" },
+    { id: "demo-girona",    displayName: "Institut Girona",   color: "#9b59b6", center: "Amor Children's Home" },
+    { id: "demo-tarragona", displayName: "Escola Tarragona",  color: "#16a085", center: "Purwanchal Bal Sewa" },
+    { id: "demo-lleida",    displayName: "Institut Lleida",   color: "#f39c12", center: "Amics del Nepal" },
+    { id: "demo-manresa",   displayName: "Escola Manresa",    color: "#e74c3c", center: "Amor Children's Home" },
 ];
 
 // ============================================================
-// CENTER POSITIONS (% within map-frame, matching activity pins)
+// CENTER POSITIONS (% inside .map-stage — schools cluster here)
 // ============================================================
 const CENTER_POSITIONS = {
-    "Amor Children's Home": { top: 34, left: 7 },
-    "Amics del Nepal":      { top: 56, left: 65 },
-    "Purwanchal Bal Sewa":  { top: 85, left: 87 }
+    "Amor Children's Home": { top: 35, left: 5 },
+    "Amics del Nepal":      { top: 58, left: 58 },
+    "Purwanchal Bal Sewa":  { top: 90, left: 92 }
+};
+
+// ============================================================
+// NAV BUTTON COLORS for ripple
+// ============================================================
+const RIPPLE_COLORS = {
+    political: '#2d4a5e',
+    physical:  '#5b6e3f',
+    teams:     '#c8434d',
+    activities:'#e8773c'
+};
+
+const MAP_SRC = {
+    political:  'Nepal 2 political-map.png',
+    physical:   'Nepal-Map-with-river-and-national-park-1.png',
+    teams:      'Nepal-Map-ToPrint.png',
+    activities: 'Nepal-Map-ToPrint.png'
 };
 
 // ============================================================
@@ -58,6 +75,7 @@ const CENTER_POSITIONS = {
 // ============================================================
 let currentUser = null;
 let activeSchools = [];
+let currentMode = 'activities';
 const SESSION_KEY = "nepal-docfest-session";
 
 // ============================================================
@@ -70,7 +88,7 @@ function startApp() {
 }
 
 // ============================================================
-// MODAL HELPERS
+// MODALS
 // ============================================================
 function toggleLoginModal() { document.getElementById('login-modal').classList.toggle('active'); }
 function openLocationSelector() { document.getElementById('loc-modal').classList.add('active'); }
@@ -83,11 +101,7 @@ function openUserMenu() {
     document.getElementById('user-menu').classList.add('active');
 }
 function closeUserMenu() { document.getElementById('user-menu').classList.remove('active'); }
-
-function handleUserClick() {
-    if (currentUser) openUserMenu();
-    else toggleLoginModal();
-}
+function handleUserClick() { currentUser ? openUserMenu() : toggleLoginModal(); }
 
 // ============================================================
 // AUTH
@@ -117,10 +131,8 @@ async function setUserLocation(loc) {
         closeLocationSelector();
         return;
     }
-
     currentUser.center = loc;
     document.getElementById('display-user-loc').innerText = loc;
-
     try {
         await setDoc(doc(db, "activeSessions", currentUser.username), {
             displayName: currentUser.displayName,
@@ -161,7 +173,6 @@ function updateUserUI() {
     }
 }
 
-// Auto-restore session
 function restoreSession() {
     const saved = localStorage.getItem(SESSION_KEY);
     if (!saved) return;
@@ -176,7 +187,7 @@ function restoreSession() {
 }
 
 // ============================================================
-// REAL-TIME LISTENER + DEMO SEED
+// FIRESTORE LISTENER + DEMO SEED
 // ============================================================
 async function seedDemoIfEmpty() {
     try {
@@ -199,7 +210,6 @@ function listenActiveSessions() {
         activeSchools = [];
         snapshot.forEach(d => activeSchools.push({ id: d.id, ...d.data() }));
         renderActiveSchools();
-        // Update currentUser's center from snapshot if it matches
         if (currentUser) {
             const mine = activeSchools.find(s => s.id === currentUser.username);
             if (mine) {
@@ -211,32 +221,26 @@ function listenActiveSessions() {
 }
 
 // ============================================================
-// RENDER ACTIVE SCHOOLS
+// RENDER SCHOOLS
 // ============================================================
 function renderActiveSchools() {
     const layer = document.getElementById('schools-layer');
     layer.innerHTML = '';
-
-    // Group by center
     const grouped = {};
     activeSchools.forEach(s => {
         if (!grouped[s.center]) grouped[s.center] = [];
         grouped[s.center].push(s);
     });
-
     Object.entries(grouped).forEach(([center, schools]) => {
         const pos = CENTER_POSITIONS[center];
         if (!pos) return;
-
         schools.forEach((school, i) => {
-            // Cluster pattern: arrange in a small arc beneath the activity pin
             const cols = Math.min(schools.length, 4);
             const row = Math.floor(i / cols);
             const col = i % cols;
-            const totalRowWidth = (cols - 1) * 4.5;
-            const offsetX = (col * 4.5) - (totalRowWidth / 2);
-            const offsetY = 5 + (row * 5);
-
+            const totalRowWidth = (cols - 1) * 5;
+            const offsetX = (col * 5) - (totalRowWidth / 2);
+            const offsetY = 4 + (row * 5);
             const el = document.createElement('div');
             el.className = 'school-marker';
             if (currentUser && school.id === currentUser.username) el.classList.add('is-me');
@@ -244,7 +248,7 @@ function renderActiveSchools() {
             el.style.top = `${pos.top + offsetY}%`;
             el.style.left = `${pos.left + offsetX}%`;
             el.innerHTML = `
-                <div class="school-avatar">${getInitials(school.displayName)}</div>
+                <div class="school-avatar" style="background:${school.color}">${getInitials(school.displayName)}</div>
                 <div class="school-tooltip">${school.displayName}${school.id.startsWith('demo-') ? ' (demo)' : ''}</div>
             `;
             layer.appendChild(el);
@@ -257,38 +261,61 @@ function getInitials(name) {
 }
 
 // ============================================================
-// MAP NAVIGATION
+// MAP NAVIGATION + RIPPLE
 // ============================================================
 function changeMap(type, event) {
+    if (type === currentMode) return;
+    currentMode = type;
+
+    const btn = event.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    // Spawn ripple
+    const ripple = document.createElement('div');
+    ripple.className = 'map-ripple';
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.style.background = RIPPLE_COLORS[type];
+    document.getElementById('ripple-host').appendChild(ripple);
+
+    requestAnimationFrame(() => ripple.classList.add('expand'));
+
+    // Swap map content while ripple covers screen
+    setTimeout(() => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyMapMode(type);
+    }, 340);
+
+    // Fade ripple out
+    setTimeout(() => {
+        ripple.classList.add('fade');
+        setTimeout(() => ripple.remove(), 320);
+    }, 480);
+}
+
+function applyMapMode(type) {
     const mapImg = document.getElementById('main-map-img');
     const activities = document.getElementById('activities-layer');
     const experts = document.getElementById('experts-layer');
     const schools = document.getElementById('schools-layer');
-    const buttons = document.querySelectorAll('.nav-btn');
 
-    buttons.forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    mapImg.src = MAP_SRC[type];
 
-    if (type === 'political') {
-        mapImg.src = 'Nepal 2 political-map.png';
-        activities.style.display = 'none';
-        experts.style.display = 'none';
-        schools.style.display = 'none';
-    } else if (type === 'physical') {
-        mapImg.src = 'Nepal-Map-with-river-and-national-park-1.png';
+    if (type === 'political' || type === 'physical') {
         activities.style.display = 'none';
         experts.style.display = 'none';
         schools.style.display = 'none';
     } else if (type === 'teams') {
-        mapImg.src = 'Nepal-Map-ToPrint.png';
         activities.style.display = 'none';
-        experts.style.display = 'block';
-        schools.style.display = 'none';
-    } else {
-        mapImg.src = 'Nepal-Map-ToPrint.png';
+        experts.style.display = 'none';
+        schools.style.display = 'block';
+    } else { // activities
         activities.style.display = 'block';
         experts.style.display = 'block';
-        schools.style.display = 'block';
+        schools.style.display = 'none';
     }
 }
 
@@ -327,7 +354,7 @@ function showToast(msg) {
 }
 
 // ============================================================
-// EXPOSE TO WINDOW (for inline onclick handlers)
+// EXPOSE TO WINDOW
 // ============================================================
 Object.assign(window, {
     startApp, toggleLoginModal, openLocationSelector, closeLocationSelector,

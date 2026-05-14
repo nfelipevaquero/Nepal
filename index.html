@@ -12,16 +12,21 @@
 <body>
 
     <div id="toast-container"></div>
+    <div id="ripple-host"></div>
 
     <div class="app-container">
 
         <div id="intro-screen" class="screen intro-layer active">
             <button class="skip-btn" onclick="startApp()">SKIP INTRO ➔</button>
-            <img src="Nepal-gif.gif" class="intro-gif" alt="Intro Animation">
-            <div class="intro-overlay"></div>
-            <div class="intro-title">
-                <p>School DocFest · Nepal Expedition</p>
-                <h1>Discover <span class="accent">Nepal</span></h1>
+            <div class="map-stage-wrap">
+                <div class="map-stage intro-stage">
+                    <img src="Nepal-gif.gif" class="stage-media" alt="Intro Animation">
+                    <div class="intro-overlay"></div>
+                    <div class="intro-title">
+                        <p>School DocFest · Nepal Expedition</p>
+                        <h1>Discover <span class="accent">Nepal</span></h1>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -36,65 +41,65 @@
                 </div>
             </div>
 
-            <div class="map-full-container">
-                <div class="map-frame">
-                    <img src="Nepal-Map-ToPrint.png" id="main-map-img" class="map-image" alt="Nepal Map">
+            <div class="map-stage-wrap">
+                <div class="map-stage">
+                    <img src="Nepal-Map-ToPrint.png" id="main-map-img" class="stage-media" alt="Nepal Map">
 
-                    <div id="activities-layer">
-                        <div class="marker-group" style="top: 34%; left: 7%;">
+                    <div id="activities-layer" class="overlay-layer">
+                        <div class="marker-group" style="top: 33%; left: 5%;">
                             <button class="box orange-big" onclick="openExpert('Amor Children\'s Home', '#e8773c')">Amor Children's Home</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 56%; left: 65%;">
+                        <div class="marker-group" style="top: 56%; left: 58%;">
                             <button class="box orange-big" onclick="openExpert('Amics del Nepal', '#e8773c')">Amics del Nepal</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 85%; left: 87%;">
+                        <div class="marker-group" style="top: 88%; left: 92%;">
                             <button class="box orange-big" onclick="openExpert('Purwanchal Bal Sewa', '#e8773c')">Purwanchal Bal Sewa</button>
                             <div class="pointer"></div>
                         </div>
                     </div>
 
-                    <div id="experts-layer">
-                        <div class="marker-group" style="top: 19%; left: 16%;">
+                    <div id="experts-layer" class="overlay-layer">
+                        <div class="marker-group" style="top: 12%; left: 12%;">
                             <button class="box red" onclick="openExpert('Language Expert', '#c8434d')">Language Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 21%; left: 27%;">
+                        <div class="marker-group" style="top: 14%; left: 24%;">
                             <button class="box red" onclick="openExpert('Biodiversity Expert', '#c8434d')">Biodiversity Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 56%; left: 38%;">
+                        <div class="marker-group" style="top: 65%; left: 30%;">
                             <button class="box red" onclick="openExpert('Culture Expert', '#c8434d')">Culture Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 48%; left: 49%;">
+                        <div class="marker-group" style="top: 48%; left: 44%;">
                             <button class="box red" onclick="openExpert('Food Expert', '#c8434d')">Food Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 62%; left: 54%;">
+                        <div class="marker-group" style="top: 70%; left: 53%;">
                             <button class="box red" onclick="openExpert('Festivals Expert', '#c8434d')">Festivals Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 73%; left: 64%;">
+                        <div class="marker-group" style="top: 80%; left: 63%;">
                             <button class="box red" onclick="openExpert('Economy Expert', '#c8434d')">Economy Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 60%; left: 80%;">
+                        <div class="marker-group" style="top: 60%; left: 76%;">
                             <button class="box red" onclick="openExpert('Geography Expert', '#c8434d')">Geography Expert</button>
                             <div class="pointer"></div>
                         </div>
                     </div>
 
-                    <div id="schools-layer"></div>
+                    <div id="schools-layer" class="overlay-layer"></div>
                 </div>
+            </div>
 
-                <div class="bottom-nav">
-                    <button class="nav-btn" onclick="changeMap('political', event)">POLITICAL MAP</button>
-                    <button class="nav-btn" onclick="changeMap('physical', event)">PHYSICAL MAP</button>
-                    <button class="nav-btn" onclick="changeMap('teams', event)">TEAMS (Experts)</button>
-                    <button class="nav-btn active" onclick="changeMap('activities', event)">ACTIVITIES (Homes)</button>
-                </div>
+            <div class="bottom-nav">
+                <button class="nav-btn" data-mode="political" onclick="changeMap('political', event)">POLITICAL MAP</button>
+                <button class="nav-btn" data-mode="physical" onclick="changeMap('physical', event)">PHYSICAL MAP</button>
+                <button class="nav-btn" data-mode="teams" onclick="changeMap('teams', event)">TEAMS</button>
+                <button class="nav-btn active" data-mode="activities" onclick="changeMap('activities', event)">ACTIVITIES</button>
             </div>
         </div>
 
