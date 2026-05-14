@@ -17,14 +17,39 @@
     <div class="app-container">
 
         <div id="intro-screen" class="screen intro-layer active">
-            <button class="skip-btn" onclick="startApp()">SKIP INTRO ➔</button>
+            <button class="skip-btn-mini" onclick="startApp()">Skip ✕</button>
             <div class="map-stage-wrap">
                 <div class="map-stage intro-stage">
                     <img src="Nepal-gif.gif" class="stage-media" alt="Intro Animation">
                     <div class="intro-overlay"></div>
-                    <div class="intro-title">
-                        <p>School DocFest · Nepal Expedition</p>
-                        <h1>Discover <span class="accent">Nepal</span></h1>
+                    <div class="intro-vignette"></div>
+
+                    <div class="intro-eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        Edition 2025 · Live Now
+                    </div>
+
+                    <div class="intro-content">
+                        <h1 class="intro-heading">
+                            <span class="line line-1">Discover</span>
+                            <span class="line line-2"><em>Nepal</em></span>
+                        </h1>
+                        <p class="intro-lead">
+                            An interactive journey through the culture, geography
+                            and people of the Himalayas.
+                        </p>
+                        <button class="intro-cta" onclick="startApp()">
+                            <span>Begin Journey</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M13 6l6 6-6 6"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="intro-footer">
+                        <span>SCHOOL DOCFEST</span>
+                        <span class="dot-sep">·</span>
+                        <span>POWERED BY AMICS DEL NEPAL</span>
                     </div>
                 </div>
             </div>
@@ -46,11 +71,11 @@
                     <img src="Nepal-Map-ToPrint.png" id="main-map-img" class="stage-media" alt="Nepal Map">
 
                     <div id="activities-layer" class="overlay-layer">
-                        <div class="marker-group" style="top: 33%; left: 5%;">
+                        <div class="marker-group" style="top: 40%; left: 5%;">
                             <button class="box orange-big" onclick="openExpert('Amor Children\'s Home', '#e8773c')">Amor Children's Home</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 56%; left: 58%;">
+                        <div class="marker-group" style="top: 57%; left: 62%;">
                             <button class="box orange-big" onclick="openExpert('Amics del Nepal', '#e8773c')">Amics del Nepal</button>
                             <div class="pointer"></div>
                         </div>
@@ -61,31 +86,31 @@
                     </div>
 
                     <div id="experts-layer" class="overlay-layer">
-                        <div class="marker-group" style="top: 12%; left: 12%;">
+                        <div class="marker-group" style="top: 14%; left: 11%;">
                             <button class="box red" onclick="openExpert('Language Expert', '#c8434d')">Language Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 14%; left: 24%;">
+                        <div class="marker-group" style="top: 18%; left: 20%;">
                             <button class="box red" onclick="openExpert('Biodiversity Expert', '#c8434d')">Biodiversity Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 65%; left: 30%;">
+                        <div class="marker-group" style="top: 62%; left: 36%;">
                             <button class="box red" onclick="openExpert('Culture Expert', '#c8434d')">Culture Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 48%; left: 44%;">
+                        <div class="marker-group" style="top: 47%; left: 43%;">
                             <button class="box red" onclick="openExpert('Food Expert', '#c8434d')">Food Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 70%; left: 53%;">
+                        <div class="marker-group" style="top: 68%; left: 52%;">
                             <button class="box red" onclick="openExpert('Festivals Expert', '#c8434d')">Festivals Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 80%; left: 63%;">
+                        <div class="marker-group" style="top: 79%; left: 65%;">
                             <button class="box red" onclick="openExpert('Economy Expert', '#c8434d')">Economy Expert</button>
                             <div class="pointer"></div>
                         </div>
-                        <div class="marker-group" style="top: 60%; left: 76%;">
+                        <div class="marker-group" style="top: 62%; left: 79%;">
                             <button class="box red" onclick="openExpert('Geography Expert', '#c8434d')">Geography Expert</button>
                             <div class="pointer"></div>
                         </div>
@@ -96,10 +121,37 @@
             </div>
 
             <div class="bottom-nav">
-                <button class="nav-btn" data-mode="political" onclick="changeMap('political', event)">POLITICAL MAP</button>
-                <button class="nav-btn" data-mode="physical" onclick="changeMap('physical', event)">PHYSICAL MAP</button>
-                <button class="nav-btn" data-mode="teams" onclick="changeMap('teams', event)">TEAMS</button>
-                <button class="nav-btn active" data-mode="activities" onclick="changeMap('activities', event)">ACTIVITIES</button>
+                <button class="nav-btn" data-mode="political" onclick="changeMap('political', event)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="10" width="16" height="10"/>
+                        <path d="M4 10l8-6 8 6"/>
+                        <line x1="9" y1="20" x2="9" y2="14"/>
+                        <line x1="15" y1="20" x2="15" y2="14"/>
+                    </svg>
+                    <span>Political</span>
+                </button>
+                <button class="nav-btn" data-mode="physical" onclick="changeMap('physical', event)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 20l5-9 4 6 3-4 6 7H3z"/>
+                        <circle cx="17" cy="6" r="1.5" fill="currentColor"/>
+                    </svg>
+                    <span>Physical</span>
+                </button>
+                <button class="nav-btn" data-mode="teams" onclick="changeMap('teams', event)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="8" r="3.5"/>
+                        <circle cx="17" cy="9" r="2.5"/>
+                        <path d="M2 20c0.5-3.5 3-6 7-6s6.5 2.5 7 6"/>
+                        <path d="M16 19c0.3-2 1.5-4 4-4s3 1.5 3 4"/>
+                    </svg>
+                    <span>Teams</span>
+                </button>
+                <button class="nav-btn active" data-mode="activities" onclick="changeMap('activities', event)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21s-7-5-7-11a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 6-7 11-7 11z"/>
+                    </svg>
+                    <span>Activities</span>
+                </button>
             </div>
         </div>
 

@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // ============================================================
-// USERS — closed list of schools
+// USERS
 // ============================================================
 const USERS = {
     "barcelona":  { password: "nepal2025", displayName: "Escola Barcelona",   color: "#3498db" },
@@ -33,9 +33,6 @@ const USERS = {
     "vic":        { password: "nepal2025", displayName: "Institut Vic",       color: "#5f27cd" },
 };
 
-// ============================================================
-// DEMO SESSIONS — auto-populated if Firestore is empty
-// ============================================================
 const DEMO_SESSIONS = [
     { id: "demo-bcn",       displayName: "Escola Barcelona",  color: "#3498db", center: "Amics del Nepal" },
     { id: "demo-girona",    displayName: "Institut Girona",   color: "#9b59b6", center: "Amor Children's Home" },
@@ -44,23 +41,18 @@ const DEMO_SESSIONS = [
     { id: "demo-manresa",   displayName: "Escola Manresa",    color: "#e74c3c", center: "Amor Children's Home" },
 ];
 
-// ============================================================
-// CENTER POSITIONS (% inside .map-stage — schools cluster here)
-// ============================================================
+// Center positions match the activity pin tips
 const CENTER_POSITIONS = {
-    "Amor Children's Home": { top: 35, left: 5 },
-    "Amics del Nepal":      { top: 58, left: 58 },
-    "Purwanchal Bal Sewa":  { top: 90, left: 92 }
+    "Amor Children's Home": { top: 40, left: 5 },
+    "Amics del Nepal":      { top: 57, left: 62 },
+    "Purwanchal Bal Sewa":  { top: 88, left: 92 }
 };
 
-// ============================================================
-// NAV BUTTON COLORS for ripple
-// ============================================================
 const RIPPLE_COLORS = {
-    political: '#2d4a5e',
-    physical:  '#5b6e3f',
-    teams:     '#c8434d',
-    activities:'#e8773c'
+    political:  '#2d4a5e',
+    physical:   '#5b6e3f',
+    teams:      '#c8434d',
+    activities: '#e8773c'
 };
 
 const MAP_SRC = {
@@ -70,9 +62,6 @@ const MAP_SRC = {
     activities: 'Nepal-Map-ToPrint.png'
 };
 
-// ============================================================
-// STATE
-// ============================================================
 let currentUser = null;
 let activeSchools = [];
 let currentMode = 'activities';
@@ -187,7 +176,7 @@ function restoreSession() {
 }
 
 // ============================================================
-// FIRESTORE LISTENER + DEMO SEED
+// FIRESTORE
 // ============================================================
 async function seedDemoIfEmpty() {
     try {
@@ -220,9 +209,6 @@ function listenActiveSessions() {
     });
 }
 
-// ============================================================
-// RENDER SCHOOLS
-// ============================================================
 function renderActiveSchools() {
     const layer = document.getElementById('schools-layer');
     layer.innerHTML = '';
@@ -261,7 +247,7 @@ function getInitials(name) {
 }
 
 // ============================================================
-// MAP NAVIGATION + RIPPLE
+// MAP NAVIGATION + SOFT RIPPLE
 // ============================================================
 function changeMap(type, event) {
     if (type === currentMode) return;
@@ -272,28 +258,32 @@ function changeMap(type, event) {
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;
 
-    // Spawn ripple
+    const stage = document.querySelector('.map-stage');
     const ripple = document.createElement('div');
     ripple.className = 'map-ripple';
     ripple.style.left = `${x}px`;
     ripple.style.top = `${y}px`;
-    ripple.style.background = RIPPLE_COLORS[type];
+    ripple.style.setProperty('--rc', RIPPLE_COLORS[type]);
     document.getElementById('ripple-host').appendChild(ripple);
 
-    requestAnimationFrame(() => ripple.classList.add('expand'));
+    requestAnimationFrame(() => {
+        ripple.classList.add('expand');
+        stage.classList.add('swapping');
+    });
 
-    // Swap map content while ripple covers screen
+    // Swap map content when ripple is at peak coverage
     setTimeout(() => {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         applyMapMode(type);
-    }, 340);
-
-    // Fade ripple out
-    setTimeout(() => {
-        ripple.classList.add('fade');
-        setTimeout(() => ripple.remove(), 320);
     }, 480);
+
+    // Restore stage clarity
+    setTimeout(() => stage.classList.remove('swapping'), 700);
+
+    // Fade out and cleanup ripple
+    setTimeout(() => ripple.classList.add('fade'), 600);
+    setTimeout(() => ripple.remove(), 1200);
 }
 
 function applyMapMode(type) {
@@ -312,7 +302,7 @@ function applyMapMode(type) {
         activities.style.display = 'none';
         experts.style.display = 'none';
         schools.style.display = 'block';
-    } else { // activities
+    } else {
         activities.style.display = 'block';
         experts.style.display = 'block';
         schools.style.display = 'none';
@@ -320,7 +310,7 @@ function applyMapMode(type) {
 }
 
 // ============================================================
-// EXPERT/HOME CONTENT SCREEN
+// EXPERT SCREEN
 // ============================================================
 function openExpert(name, color) {
     document.getElementById('expert-title').innerText = name.toUpperCase();
@@ -354,7 +344,7 @@ function showToast(msg) {
 }
 
 // ============================================================
-// EXPOSE TO WINDOW
+// EXPOSE
 // ============================================================
 Object.assign(window, {
     startApp, toggleLoginModal, openLocationSelector, closeLocationSelector,
