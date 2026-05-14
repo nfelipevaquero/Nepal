@@ -41,11 +41,11 @@ const DEMO_SESSIONS = [
     { id: "demo-manresa",   displayName: "Escola Manresa",    color: "#e74c3c", center: "Amor Children's Home" },
 ];
 
-// Centers point at the same cities as the activity pins
+// Center positions match the activity pin tips (measured from the actual PNG)
 const CENTER_POSITIONS = {
-    "Amor Children's Home": { top: 37, left: 3 },   // Mahendranagar (far west)
-    "Amics del Nepal":      { top: 62, left: 64 },  // Kathmandu (center-east)
-    "Purwanchal Bal Sewa":  { top: 90, left: 91 }   // Biratnagar (far east-south)
+    "Amor Children's Home": { top: 35,   left: 5.5 },   // Mahendranagar
+    "Amics del Nepal":      { top: 59.2, left: 63.7 },  // Kathmandu
+    "Purwanchal Bal Sewa":  { top: 83.6, left: 85.6 }   // Biratnagar
 };
 
 const RIPPLE_COLORS = {
@@ -224,9 +224,9 @@ function renderActiveSchools() {
             const cols = Math.min(schools.length, 4);
             const row = Math.floor(i / cols);
             const col = i % cols;
-            const totalRowWidth = (cols - 1) * 5;
-            const offsetX = (col * 5) - (totalRowWidth / 2);
-            const offsetY = 4 + (row * 5);
+            const totalRowWidth = (cols - 1) * 4.5;
+            const offsetX = (col * 4.5) - (totalRowWidth / 2);
+            const offsetY = 5 + (row * 5);
             const el = document.createElement('div');
             el.className = 'school-marker';
             if (currentUser && school.id === currentUser.username) el.classList.add('is-me');
@@ -247,7 +247,7 @@ function getInitials(name) {
 }
 
 // ============================================================
-// MAP NAVIGATION + SOFT RIPPLE
+// MAP NAVIGATION + RIPPLE
 // ============================================================
 function changeMap(type, event) {
     if (type === currentMode) return;
