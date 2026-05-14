@@ -41,10 +41,11 @@ const DEMO_SESSIONS = [
     { id: "demo-manresa",   displayName: "Escola Manresa",    color: "#e74c3c", center: "Amor Children's Home" },
 ];
 
+// Centers point at the same cities as the activity pins
 const CENTER_POSITIONS = {
-    "Amor Children's Home": { top: 40, left: 5 },
-    "Amics del Nepal":      { top: 57, left: 62 },
-    "Purwanchal Bal Sewa":  { top: 88, left: 92 }
+    "Amor Children's Home": { top: 37, left: 3 },   // Mahendranagar (far west)
+    "Amics del Nepal":      { top: 62, left: 64 },  // Kathmandu (center-east)
+    "Purwanchal Bal Sewa":  { top: 90, left: 91 }   // Biratnagar (far east-south)
 };
 
 const RIPPLE_COLORS = {

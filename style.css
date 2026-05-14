@@ -20,10 +20,11 @@
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-soft: cubic-bezier(0.25, 1, 0.5, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-    --stage-aspect: 2 / 1;
-    --stage-pad-top: 90px;
-    --stage-pad-bottom: 110px;
-    --stage-pad-x: 30px;
+    /* Exact aspect ratio of Nepal-Map-ToPrint.png (4957 × 2840) */
+    --stage-aspect: 4957 / 2840;
+    --stage-pad-top: 80px;
+    --stage-pad-bottom: 95px;
+    --stage-pad-x: 20px;
 }
 
 * { box-sizing: border-box; }
@@ -51,7 +52,7 @@ body, html {
 .expert-layer { z-index: 50; background: #ffffff; transform: translateX(100%); overflow-y: auto; }
 .expert-layer.active { transform: translateX(0); }
 
-/* === STAGE (shared) === */
+/* === STAGE (shared by intro + all maps) === */
 .map-stage-wrap {
     width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
@@ -65,15 +66,25 @@ body, html {
 .map-stage {
     position: relative;
     width: 100%;
-    max-width: 1600px;
+    max-width: 1900px;
     aspect-ratio: var(--stage-aspect);
     max-height: 100%;
-    border-radius: 14px;
-    overflow: hidden;
+    overflow: visible; /* Allow edge labels to extend outside */
     animation: stageEnter 1.2s var(--ease-out);
     transition: filter 0.5s ease;
 }
 @keyframes stageEnter { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
+/* Intro stage gets its own visual treatment with rounded corners */
+.intro-stage {
+    overflow: hidden;
+    border-radius: 14px;
+    background:
+        radial-gradient(ellipse at 75% 50%, rgba(232,119,60,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 80%, rgba(45,74,94,0.06) 0%, transparent 55%),
+        linear-gradient(180deg, #fdfaf5 0%, #f7f1e8 100%);
+    border: 1px solid rgba(26,31,46,0.06);
+}
 
 .stage-media {
     position: absolute; inset: 0;
@@ -94,16 +105,7 @@ body, html {
 .map-stage.swapping .stage-media { opacity: 0.55; transform: scale(1.015); }
 .map-stage.swapping .overlay-layer { opacity: 0.3; }
 
-/* === INTRO STAGE — editorial cover === */
-.intro-stage {
-    background:
-        radial-gradient(ellipse at 75% 50%, rgba(232,119,60,0.08) 0%, transparent 55%),
-        radial-gradient(ellipse at 20% 80%, rgba(45,74,94,0.06) 0%, transparent 55%),
-        linear-gradient(180deg, #fdfaf5 0%, #f7f1e8 100%);
-    border: 1px solid rgba(26,31,46,0.06);
-}
-
-/* Topographic dot pattern */
+/* === INTRO === */
 .intro-topo {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
@@ -112,7 +114,6 @@ body, html {
     z-index: 1;
 }
 
-/* GIF as centerpiece, positioned right */
 .intro-media-wrap {
     position: absolute;
     top: 0; right: 0; bottom: 0;
@@ -136,7 +137,6 @@ body, html {
     mix-blend-mode: multiply;
 }
 
-/* === INTRO UI === */
 .intro-skip {
     position: absolute;
     top: 28px; right: 30px;
@@ -303,10 +303,7 @@ body, html {
     display: flex; align-items: center; gap: 18px;
     animation: fadeUp 1s var(--ease-out) 1.4s backwards;
 }
-.intro-footer-line {
-    flex: 1; height: 1px;
-    background: rgba(26,31,46,0.15);
-}
+.intro-footer-line { flex: 1; height: 1px; background: rgba(26,31,46,0.15); }
 .intro-footer-text {
     display: inline-flex; align-items: center; gap: 10px;
     color: var(--ink-muted);
@@ -741,26 +738,23 @@ iframe { width: 100%; height: 100%; border: none; }
 
 /* === RESPONSIVE === */
 @media (max-width: 900px) {
-    :root { --stage-pad-top: 80px; --stage-pad-bottom: 90px; --stage-pad-x: 10px; }
+    :root { --stage-pad-top: 75px; --stage-pad-bottom: 85px; --stage-pad-x: 10px; }
     .video-grid { grid-template-columns: 1fr; padding: 30px; }
     header#dynamic-header { padding: 30px; flex-direction: column; align-items: flex-start; gap: 16px; }
-    .nav-btn { padding: 8px 12px; font-size: 9px; }
+    .nav-btn { padding: 10px; font-size: 9px; }
     .nav-btn svg { width: 13px; height: 13px; }
     .nav-btn span { display: none; }
-    .nav-btn { padding: 10px; }
     .box.orange-big { font-size: 9px; padding: 8px 12px; }
     .box.red { font-size: 9px; padding: 5px 9px; }
     .school-marker { width: 28px; height: 28px; }
     .school-avatar { font-size: 11px; }
 
-    /* Intro responsive */
     .intro-media-wrap { width: 100%; opacity: 0.25; }
-    .intro-content { max-width: calc(100% - 80px); }
+    .intro-content { max-width: calc(100% - 80px); left: 24px; }
     .intro-heading { font-size: clamp(2.5rem, 12vw, 4rem); }
     .intro-eyebrow { left: 24px; top: 24px; font-size: 9px; padding: 7px 14px; }
     .intro-skip { right: 24px; top: 24px; }
     .intro-meta { display: none; }
     .intro-footer { left: 24px; right: 24px; bottom: 20px; }
     .intro-footer-text { font-size: 8px; gap: 6px; }
-    .intro-content { left: 24px; }
 }
