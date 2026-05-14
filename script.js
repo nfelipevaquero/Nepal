@@ -1,4 +1,4 @@
-// Temporizador automático Intro
+// Intro auto-timer
 let introTimer = setTimeout(startApp, 15000);
 
 function startApp() {
@@ -6,7 +6,7 @@ function startApp() {
     document.getElementById('intro-screen').classList.add('fade-out');
 }
 
-// Login & Ubicación
+// Login & Location
 function toggleLoginModal() { document.getElementById('login-modal').classList.toggle('active'); }
 function closeLocationSelector() { document.getElementById('loc-modal').classList.remove('active'); }
 function openLocationSelector() { document.getElementById('loc-modal').classList.add('active'); }
@@ -15,18 +15,18 @@ function handleAuth() {
     const user = document.getElementById('username').value.trim();
     if (user) {
         document.getElementById('user-name-text').innerText = user;
-        showToast("¡Hola, " + user + "!");
+        showToast("Hello, " + user + "!");
         toggleLoginModal();
     }
 }
 
 function setUserLocation(loc) {
     document.getElementById('display-user-loc').innerText = loc;
-    showToast("Centro: " + loc);
+    showToast("Center: " + loc);
     closeLocationSelector();
 }
 
-// Navegación de Mapas (NOMBRES ACTUALIZADOS)
+// Map navigation
 function changeMap(type, event) {
     const mapImg = document.getElementById('main-map-img');
     const activities = document.getElementById('activities-layer');
@@ -37,7 +37,7 @@ function changeMap(type, event) {
     event.target.classList.add('active');
 
     if (type === 'political') {
-        mapImg.src = 'Nepal 2 political-map.png'; 
+        mapImg.src = 'Nepal 2 political-map.png';
         activities.style.display = 'none';
         experts.style.display = 'none';
     } else if (type === 'physical') {
@@ -55,23 +55,21 @@ function changeMap(type, event) {
     }
 }
 
-// Pantalla de Contenido (Expertos/Casas)
+// Content screen (Experts / Homes)
 function openExpert(name, color) {
     document.getElementById('expert-title').innerText = name.toUpperCase();
     document.getElementById('dynamic-header').style.backgroundColor = color;
-    
-    // IDs de ejemplo (puedes cambiarlos según el experto)
-    const videoId = "q7HNoX9Lp8A"; 
+
+    const videoId = "q7HNoX9Lp8A"; // Replace per expert
     document.getElementById('video-1').src = `https://www.youtube.com/embed/${videoId}`;
     document.getElementById('video-2').src = `https://www.youtube.com/embed/${videoId}`;
     document.getElementById('video-3').src = `https://www.youtube.com/embed/${videoId}`;
-    
+
     document.getElementById('expert-screen').classList.add('active');
 }
 
 function closeExpert() {
     document.getElementById('expert-screen').classList.remove('active');
-    // Limpiar videos para que dejen de sonar
     document.getElementById('video-1').src = "";
     document.getElementById('video-2').src = "";
     document.getElementById('video-3').src = "";

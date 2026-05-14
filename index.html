@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal DocFest | Mapa Interactivo</title>
+    <title>Nepal DocFest | Interactive Map</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,22 +16,22 @@
     <div class="app-container">
 
         <div id="intro-screen" class="screen intro-layer active">
-            <button class="skip-btn" onclick="startApp()">SALTAR INTRO ➔</button>
+            <button class="skip-btn" onclick="startApp()">SKIP INTRO ➔</button>
             <img src="Nepal-gif.gif" class="intro-gif" alt="Intro Animation">
             <div class="intro-overlay"></div>
             <div class="intro-title">
                 <p>School DocFest · Nepal Expedition</p>
-                <h1>Descubre <span class="accent">Nepal</span></h1>
+                <h1>Discover <span class="accent">Nepal</span></h1>
             </div>
         </div>
 
         <div id="map-screen" class="screen map-layer">
             <div class="top-bar">
                 <div class="user-info" onclick="toggleLoginModal()">
-                    👤 <span id="user-name-text">Invitado (Click Login)</span>
+                    👤 <span id="user-name-text">Guest (Click to Login)</span>
                 </div>
                 <div class="current-loc" onclick="openLocationSelector()">
-                    📍 <span id="display-user-loc">Sin ubicación</span>
+                    📍 <span id="display-user-loc">No location</span>
                 </div>
             </div>
 
@@ -96,19 +96,19 @@
         <div id="expert-screen" class="screen expert-layer next">
             <header id="dynamic-header">
                 <div class="header-titles">
-                    <h1 id="expert-title">CONTENIDO</h1>
+                    <h1 id="expert-title">CONTENT</h1>
                     <p>SCHOOL DOCFEST · Nepal Expedition</p>
                 </div>
-                <button class="close-content-btn" onclick="closeExpert()">✕ CERRAR</button>
+                <button class="close-content-btn" onclick="closeExpert()">✕ CLOSE</button>
             </header>
             <main class="video-grid">
                 <div class="video-card">
                     <div class="video-wrapper"><iframe id="video-1" src=""></iframe></div>
-                    <h3>Documental</h3>
+                    <h3>Documentary</h3>
                 </div>
-                <div class="video-card highlight">
+                <div class="video-card">
                     <div class="video-wrapper"><iframe id="video-2" src=""></iframe></div>
-                    <h3>Entrevista Principal</h3>
+                    <h3>Main Interview</h3>
                 </div>
                 <div class="video-card">
                     <div class="video-wrapper"><iframe id="video-3" src=""></iframe></div>
@@ -121,22 +121,22 @@
     <div id="login-modal" class="overlay">
         <div class="popup">
             <h2>Login</h2>
-            <input type="text" id="username" placeholder="Usuario">
-            <input type="password" id="password" placeholder="Contraseña">
-            <button class="auth-btn" onclick="handleAuth()">ENTRAR</button>
-            <button class="close-btn-simple" onclick="toggleLoginModal()">CERRAR</button>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button class="auth-btn" onclick="handleAuth()">ENTER</button>
+            <button class="close-btn-simple" onclick="toggleLoginModal()">CLOSE</button>
         </div>
     </div>
 
     <div id="loc-modal" class="overlay">
         <div class="popup">
-            <h3>Selecciona tu centro</h3>
+            <h3>Select your center</h3>
             <div class="loc-options">
                 <button onclick="setUserLocation('Amor Children\'s Home')">Amor Children's Home</button>
                 <button onclick="setUserLocation('Amics del Nepal')">Amics del Nepal</button>
                 <button onclick="setUserLocation('Purwanchal Bal Sewa')">Purwanchal Bal Sewa</button>
             </div>
-            <button class="close-btn-simple" onclick="closeLocationSelector()">CERRAR</button>
+            <button class="close-btn-simple" onclick="closeLocationSelector()">CLOSE</button>
         </div>
     </div>
 
